@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_appName__",
+  "description": "__MSG_appDesc__",
+  "default_locale": "en",
+  "version": "1.1.1",
+  "version_name": "1.1.1",
+  "icons": {
+    "16": "assets/extension-icon/app_16.png",
+    "32": "assets/extension-icon/app_32.png",
+    "48": "assets/extension-icon/app_48.png",
+    "128": "assets/extension-icon/app_128.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "assets/extension-icon/app_16.png",
+      "32": "assets/extension-icon/app_32.png",
+      "48": "assets/extension-icon/app_48.png",
+      "128": "assets/extension-icon/app_128.png"
+    }
+  },
+  "minimum_chrome_version": "103",
+  "commands": {
+    "insert-totp": {
+      "suggested_key": {
+        "default": "Ctrl+Q",
+        "mac": "Command+Q"
+      },
+      "description": "Insert TOTP code of the current website"
+    }
+  },
+  "permissions": [
+    "notifications",
+    "activeTab",
+    "storage",
+    "alarms",
+    "unlimitedStorage",
+    "clipboardRead",
+    "clipboardWrite",
+    "contextMenus",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "background": {
+    "service_worker": "/src/extension/serviceWorker.ts",
+    "type": "module"
+  },
+  "content_scripts": [],
+  "web_accessible_resources": []
+}

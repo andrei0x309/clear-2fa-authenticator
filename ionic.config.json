@@ -1,0 +1,7 @@
+{
+  "name": "Clear 2FA Authenticator",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
