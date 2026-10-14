@@ -6,8 +6,11 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <ion-accordion-group :value="openedAccordion">
-        <ion-accordion>
+      <ion-accordion-group
+        :value="openedAccordion"
+        @ionChange="openedAccordion = $event.detail.value"
+      >
+        <ion-accordion value="theme">
           <ion-item slot="header" color="light">
             <ion-label>Theme</ion-label>
           </ion-item>
@@ -30,14 +33,14 @@
             </ion-list>
           </div>
         </ion-accordion>
-        <ion-accordion>
+        <ion-accordion value="misc">
           <ion-item slot="header" color="light">
             <ion-label>Misc</ion-label>
           </ion-item>
           <div class="ion-padding" slot="content">
             <ion-item class="no-inner-border">
               <ion-label
-                >Show warning on past OTP using right click or shortcut if the website
+                >Show warning on pasting OTP using right click or shortcut if the website
                 matches more than one account</ion-label
               >
               <ion-toggle
@@ -78,7 +81,7 @@
             </ion-item>
           </div>
         </ion-accordion>
-        <ion-accordion>
+        <ion-accordion value="danger">
           <ion-item slot="header" color="light">
             <ion-label>Danger</ion-label>
           </ion-item>
@@ -91,7 +94,7 @@
             </ion-item>
           </div>
         </ion-accordion>
-        <ion-accordion>
+        <ion-accordion value="about">
           <ion-item slot="header" color="light">
             <ion-label>About</ion-label>
           </ion-item>

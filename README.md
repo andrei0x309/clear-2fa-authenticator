@@ -1,4 +1,4 @@
-# ![CLW LOGO](/public/assets/extension-icon/app_16.png?raw=true "CLW LOGO") Clear 2FA Authenticator
+# ![CLW LOGO](/public/assets/extension-icon/app_32.png?raw=true "CLW LOGO") Clear 2FA Authenticator
 
 ## Description
 
