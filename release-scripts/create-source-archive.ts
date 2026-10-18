@@ -1,5 +1,5 @@
-const pFs = import('fs')
-const pCps = import('child_process')
+const pFs = import('node:fs')
+const pCps = import('node:child_process')
 
 async function buildSource () {
     const fs = (await pFs).default
@@ -14,8 +14,9 @@ async function buildSource () {
 
     const pkg = JSON.parse(fs.readFileSync('package.json').toString());
 
-    const archiver = (await import('archiver')).default
-    const archive = archiver('zip', { zlib: { level: 9 } });
+    const ZipArchive = (await import('archiver')).ZipArchive
+    const archive = new ZipArchive({
+    zlib: { level: 9 }})
     const dirPipes = [
         '.github',
         'public',

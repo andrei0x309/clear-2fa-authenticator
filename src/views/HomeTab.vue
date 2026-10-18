@@ -190,7 +190,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, Ref, reactive } from "vue";
+import { ref, Ref, reactive, nextTick } from "vue";
 import {
   IonContent,
   IonHeader,
@@ -337,19 +337,11 @@ const formatCode = (code: string) => {
 };
 
 const deleteAccount = async (id: number) => {
-  loading.value = true;
   closePopover(id);
   await deleteAccountById(id);
-  accounts.value = await getAccounts();
-  loading.value = false;
+  filtredAccounts.value = filtredAccounts.value.filter((a) => a.id !== id);
+  accounts.value = accounts.value.filter((a) => a.id !== id);
 };
-
-// const loadRPCPerformance = () => {
-//   rpcPerformance.value = { performance: 0 };
-//   getRpcPerformance().then((res) => {
-//     rpcPerformance.value = res;
-//   });
-// };
 
 const searchAccount = (e: any) => {
   const text = e.target.value;

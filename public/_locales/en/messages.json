@@ -4,7 +4,7 @@
     "description": "Clear 2FA Authenticator"
   },
   "appDesc": {
-    "message": "An open-source browser 2FA authenticator with a simple user interface and useful features, including shortcut key, right click paste, QR code import, export to images, import json, search, and more.",
-    "description": "An open-source browser 2FA authenticator with a simple user interface and useful features, including shortcut key, right click paste, QR code import, export to images, import json, search, and more."
+    "message": "Open-source browser 2FA authenticator with a simple UI and useful features, including shortcut key,import/export search, and more.",
+    "description": "Open-source browser 2FA authenticator with a simple UI and useful features, including shortcut key,import/export search, and more."
   }
 }

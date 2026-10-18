@@ -613,7 +613,6 @@ onIonViewWillEnter(async () => {
   isRuntimeFirefox.value = isFirefox();
 
   openedAccordion.value = route.params.oppenedAccordion as string;
-  console.log("openedAccordion", openedAccordion.value);
 
   await Promise.all([
     getSettings().then((storeSettings) => {

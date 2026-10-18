@@ -35,3 +35,7 @@ npm-debug.log*
 releases
 rules.json
 docs
+/repo_res/promo-large.png
+/repo_res/promo-small.png
+/repo_res/screenshot-1.png
+/repo_res/screenshot-2.png

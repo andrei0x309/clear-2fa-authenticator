@@ -42,14 +42,20 @@ export function decodeOtpSecret(secret: string): DecodedOtpSecret {
       const url = new URL(secret);
       const secretParam = url.searchParams.get('secret');
       const issuerParam = url.searchParams.get('issuer');
+      const websiteParam = url.searchParams.get('website');
 
       if (issuerParam) {
         otpauthData.issuer = issuerParam
         if(issuerParam.includes('.')) {
           otpauthData.website = issuerParam
         }
-          
       }
+
+      if (websiteParam) {
+        otpauthData.website = websiteParam
+      }
+
+
       if (secretParam) {
         secret = secretParam;
         otpauthData.secret = secretParam;
@@ -185,8 +191,6 @@ export const generateOTP = async ({
     digits: 6 as 6 | 8,
     period: 30 as number
 }) =>  {
-    console.log(secret)
-
     return await generate({
         secret:(decodeOtpSecret(secret)).bytes,
         digits: digits,
@@ -221,15 +225,5 @@ export const createOTPProtocolString = ({
     digit?: 6 | 8,
     period?: number
 }) => {
-  return `otpauth://totp/${service}:${account}?secret=${secret}&issuer=${website}&algorithm=${algorithm}&digits=${digit}&period=${period}`
+  return `otpauth://totp/${service}:${account}?secret=${secret}&issuer=${website || service}&algorithm=${algorithm}&digits=${digit}&period=${period}&website=${website}`
 }
-
-
-
- const mainTest  = async () => {
-    // console.log(await generateOTP())
-    // console.log(getRemainingTime())
-    // console.log(getRemainingTime(Date.now(), 70))
- }
-
-//  mainTest()
