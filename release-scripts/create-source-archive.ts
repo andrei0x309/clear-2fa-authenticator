@@ -1,6 +1,8 @@
 const pFs = import('node:fs')
 const pCps = import('node:child_process')
 
+export {}
+
 async function buildSource () {
     const fs = (await pFs).default
 
@@ -69,4 +71,4 @@ const main = async () => {
     console.info('Source archive created')
 }
 
-main();
+await main();

@@ -1,11 +1,9 @@
 import { foxyfyManifest } from './utils/firefoxify'
 
 
-(async () => {
+const main = async () => {
 
     const isFirefox = process.argv[2] === 'firefox';
-
-
     const fs = (await import('fs')).default
     const path = (await import('path')).default
     const pkg = JSON.parse(fs.readFileSync('dist/manifest.json').toString());
@@ -22,4 +20,7 @@ import { foxyfyManifest } from './utils/firefoxify'
 
     console.log('Post build executed');
 
-  })();
+
+}
+
+await main();

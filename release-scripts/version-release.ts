@@ -2,6 +2,12 @@ import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
+function bumpVersion(version: string): string {
+  const parts = version.split('.');
+  parts[2] = String(Number.parseInt(parts[2]) + 1);
+  return parts.join('.');
+}
+
 async function main() {
 
   // -1. Check if you are in the main branch
@@ -41,10 +47,4 @@ async function main() {
 
 }
 
-function bumpVersion(version: string): string {
-  const parts = version.split('.');
-  parts[2] = String(Number.parseInt(parts[2]) + 1);
-  return parts.join('.');
-}
-
-main();
+await main();

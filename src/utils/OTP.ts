@@ -1,9 +1,6 @@
 import { generate, } from "@otplib/totp";
 import { crypto } from  "@otplib/plugin-crypto-web"
 
-
-const TESTSECRET = "hlgkjctzh6lmgntxrbr64wiuyiuveajq"
-
 type OtpSecretEncoding = 'hex' | 'base32' | 'base64' | 'raw';
 
 interface DecodedOtpSecret {
@@ -12,6 +9,42 @@ interface DecodedOtpSecret {
   cleaned: string;
   hasOTPAuthData: boolean
   otpauthData?: Record<string, string | undefined | number>
+}
+
+interface ArgsCreateOTPProtocolString {
+  service: string;
+  account: string;
+  issuer?: string;
+  website?: string;
+  secret: string;
+  algorithm?: 'sha1' | 'sha256' | 'sha512';
+  digits?: 6 | 8;
+  period?: number;
+}
+
+interface ArgsGenerateOTP {
+  secret: string;
+  algorithm?: 'sha1' | 'sha256' | 'sha512';
+  digits?: 6 | 8;
+  period?: number;
+}
+
+const defaultCreateOTPProtocolStringArgs: ArgsCreateOTPProtocolString = {
+  service: '',
+  account: '',
+  issuer: '',
+  website: '',
+  secret: '',
+  algorithm: 'sha1',
+  digits: 6,
+  period: 30,
+}
+
+const defaultGenerateOTPArgs: ArgsGenerateOTP = {
+  secret: '',
+  algorithm: 'sha1',
+  digits: 6,
+  period: 30,
 }
 
 /**
@@ -138,7 +171,7 @@ export function decodeOtpSecret(secret: string): DecodedOtpSecret {
 function decodeHex(hex: string): Uint8Array {
   const bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+    bytes[i / 2] = Number.parseInt(hex.substring(i, i + 2), 16);
   }
   return bytes;
 }
@@ -180,17 +213,12 @@ function decodeBase64(b64: string): Uint8Array {
 }
 
 
-export const generateOTP = async ({
-    secret,
-    algorithm = 'sha1' as "sha1" | "sha256" | "sha512",
-    digits = 6,
-    period = 30,
-} = {
-    secret: '' as string,
-    algorithm: 'sha1' as "sha1" | "sha256" | "sha512",
-    digits: 6 as 6 | 8,
-    period: 30 as number
-}) =>  {
+export const generateOTP = async (options: ArgsGenerateOTP ) =>  {
+   const { secret, algorithm, digits, period } = {
+    ...defaultGenerateOTPArgs,
+    ...options
+   }
+
     return await generate({
         secret:(decodeOtpSecret(secret)).bytes,
         digits: digits,
@@ -208,22 +236,17 @@ export const generateOTP = async ({
     })
 }
 
-export const createOTPProtocolString = ({
-   service,
-   account,
-   website,
-   secret,
-   algorithm = 'sha1' as "sha1" | "sha256" | "sha512",
-   digit = 6,
-   period = 30
-}: {
-    service: string,
-    account: string,
-    website: string,
-    secret: string,
-    algorithm?: "sha1" | "sha256" | "sha512",
-    digit?: 6 | 8,
-    period?: number
-}) => {
-  return `otpauth://totp/${service}:${account}?secret=${secret}&issuer=${website || service}&algorithm=${algorithm}&digits=${digit}&period=${period}&website=${website}`
+export const createOTPProtocolString = (options: ArgsCreateOTPProtocolString) => {
+  const  {
+    service,
+    account,
+    secret,
+    website,
+    algorithm,
+    digits,
+    period
+  } = {
+    ...defaultCreateOTPProtocolStringArgs,
+    ...options}
+  return `otpauth://totp/${service}:${account}?secret=${secret}&issuer=${website || service}&algorithm=${algorithm}&digits=${digits}&period=${period}&website=${website}`
 }

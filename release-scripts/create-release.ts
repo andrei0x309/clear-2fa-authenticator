@@ -125,11 +125,12 @@ async function ghRelease (isRebuild: boolean, forFireFox: boolean = false) {
   }
 }
 
-(async () => {
-
+const main = async () => {
   const isRebuild = process.argv[2] === 'rebuild';
 
   await ghRelease(isRebuild);
   await ghRelease(true, true);
   console.log('Release created');
-})();
+}
+
+await main();

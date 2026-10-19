@@ -190,7 +190,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, Ref, reactive, nextTick } from "vue";
+import { ref, Ref, reactive } from "vue";
 import {
   IonContent,
   IonHeader,

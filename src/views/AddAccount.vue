@@ -79,6 +79,8 @@
           class="file-input-cls"
           id="qrFileUpload"
           style="display: none"
+          aria-hidden="true"
+          inert
         />
       </ion-item>
       <ion-item>
