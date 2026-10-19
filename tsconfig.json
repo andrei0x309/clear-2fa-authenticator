@@ -20,6 +20,9 @@
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "release-scripts/*": [
+        "release-scripts/*"
       ]
     },
     "lib": [
@@ -34,7 +37,9 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "tests/**/*.vue",
+    "release-scripts/**/*.ts"
   ],
    "exclude": [
     "node_modules",

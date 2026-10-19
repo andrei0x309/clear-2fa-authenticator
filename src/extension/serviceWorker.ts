@@ -114,16 +114,6 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     }
 })
 
-chrome.alarms.create('updatePrices', {
-    periodInMinutes: 1
-})
-
-chrome.alarms.create('checkCurrentRpc', {
-    periodInMinutes: 5
-})
-
- 
-
 chrome.windows.onRemoved.addListener(async (winId) => {
  
 })

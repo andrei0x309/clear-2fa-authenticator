@@ -79,6 +79,8 @@
           class="file-input-cls"
           id="qrFileUpload"
           style="display: none"
+          aria-hidden="true"
+          inert
         />
       </ion-item>
       <ion-item>
@@ -214,13 +216,14 @@ const uploadQr = async () => {
       if (decoded.hasOTPAuthData) {
         service.value = (decoded?.otpauthData?.service as string) || "";
         account.value = (decoded?.otpauthData?.account as string) || "";
-        website.value = (decoded?.otpauthData?.otpauthData as string) || "";
-
-        if (
-          !website.value.startsWith("http://") &&
-          !website.value.startsWith("https://")
-        ) {
-          website.value = "https://" + website.value;
+        website.value = (decoded?.otpauthData?.website as string) || "";
+        if (website.value.length > 0) {
+          if (
+            !website.value.startsWith("http://") &&
+            !website.value.startsWith("https://")
+          ) {
+            website.value = "https://" + website.value;
+          }
         }
       }
     } catch (e) {
@@ -280,12 +283,10 @@ const openModal = async () => {
 };
 
 onIonViewWillEnter(async () => {
-  console.log(id.value);
   if (isEdit) {
     loading.value = true;
     accountsProm = getAccounts();
     const accounts = (await accountsProm) as Account[];
-    console.log(accounts);
     const acc = accounts.find((account) => account.id === id.value);
     if (acc) {
       service.value = acc.service;
@@ -365,7 +366,6 @@ const onSave = async () => {
   }
 
   if (code.length !== 6) {
-    console.log(code);
     alertMsg.value = "Invalid secret.";
     alertOpen.value = true;
     return;

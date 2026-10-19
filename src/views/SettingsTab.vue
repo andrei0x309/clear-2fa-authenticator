@@ -65,6 +65,8 @@
                 class="file-input-cls"
                 id="importFile"
                 style="display: none"
+                aria-hidden="true"
+                inert
               />
               <ion-label>Import Additional Accounts with a JSON File</ion-label>
               <ion-button color="warning" @click="importAcc">Import</ion-button>
@@ -438,71 +440,69 @@ const allowerdJSONFields = [
   "id",
 ] as const;
 
-const validateFile = () => {
-  return new Promise(async (resolve) => {
-    try {
-      importFile.value.click();
-      await new Promise((resolve) => {
-        importFile.value.addEventListener("change", () => {
-          resolve("");
-        });
+const validateFile = async () => {
+  try {
+    importFile.value.click();
+    await new Promise((resolve) => {
+      importFile.value.addEventListener("change", () => {
+        resolve("");
       });
+    });
 
-      if (!importFile.value?.value?.length) {
-        return resolve({
-          error: "Import json file is missing",
-        });
+    if (!importFile.value?.value?.length) {
+      return {
+        error: "Import json file is missing",
+      };
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const json = JSON.parse(event?.target?.result as string);
+      if (!json.length) {
+        return {
+          error:
+            'JSON format is wrong. Corrrect JSON format is: [{"service": "Google", "otpSecret": "F2ABAF21A2", "account": "example@gmail.com"}...]',
+        };
       }
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const json = JSON.parse(event?.target?.result as string);
-        if (!json.length) {
-          return resolve({
-            error:
-              'JSON format is wrong. Corrrect JSON format is: [{"service": "Google", "otpSecret": "F2ABAF21A2", "account": "example@gmail.com"}...]',
-          });
-        }
-        const testNecesaryFields = json.some(
-          (e: any) => !("service" in e) || !("otpSecret" in e) || !("account" in e)
-        );
-        if (testNecesaryFields) {
-          return resolve({
-            error: `JSON format is wrong. Corrrect JSON format is: [{"service": "Google", "otpSecret": "F2ABAF21A2", "account": "example@gmail.com"}...]'`,
-          });
-        }
+      const testNecesaryFields = json.some(
+        (e: any) => !("service" in e) || !("otpSecret" in e) || !("account" in e)
+      );
+      if (testNecesaryFields) {
+        return {
+          error: `JSON format is wrong. Corrrect JSON format is: [{"service": "Google", "otpSecret": "F2ABAF21A2", "account": "example@gmail.com"}...]'`,
+        };
+      }
 
-        let hasDisallowedFields = false;
+      let hasDisallowedFields = false;
 
-        for (let i = 0; i < json.length; i++) {
-          const keys = Object.keys(json[i]);
+      for (let i = 0; i < json.length; i++) {
+        const keys = Object.keys(json[i]);
 
-          for (let j = 0; j < keys.length; j++) {
-            if (
-              !allowerdJSONFields.includes(keys[j] as typeof allowerdJSONFields[number])
-            ) {
-              hasDisallowedFields = true;
-              break;
-            }
+        for (let j = 0; j < keys.length; j++) {
+          if (
+            !allowerdJSONFields.includes(keys[j] as typeof allowerdJSONFields[number])
+          ) {
+            hasDisallowedFields = true;
+            break;
           }
         }
+      }
 
-        if (hasDisallowedFields) {
-          return resolve({
-            error: `JSON format contains disallowed fields. Allowed fields are: ${allowerdJSONFields.join(
-              ", "
-            )}`,
-          });
-        }
+      if (hasDisallowedFields) {
+        return {
+          error: `JSON format contains disallowed fields. Allowed fields are: ${allowerdJSONFields.join(
+            ", "
+          )}`,
+        };
+      }
 
-        return resolve({ error: false, json });
-      };
-      reader.readAsText(importFile.value?.files?.[0] as File);
-    } catch {
-      return resolve({
-        error: "Parsing JSON file",
-      });
-    }
-  });
+      return { error: false, json };
+    };
+    reader.readAsText(importFile.value?.files?.[0] as File);
+  } catch {
+    return {
+      error: "Parsing JSON file",
+    };
+  }
 };
 
 const getPassword = () => {
@@ -613,7 +613,6 @@ onIonViewWillEnter(async () => {
   isRuntimeFirefox.value = isFirefox();
 
   openedAccordion.value = route.params.oppenedAccordion as string;
-  console.log("openedAccordion", openedAccordion.value);
 
   await Promise.all([
     getSettings().then((storeSettings) => {
