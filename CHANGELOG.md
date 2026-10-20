@@ -3,6 +3,7 @@
 ## Manifest Version 1.1.3
 
 - optimize `validateFile` function used in `SettingsTab.vue` for importing json files
+- removed some unused code
 
 ## Manifest Version 1.1.2
 

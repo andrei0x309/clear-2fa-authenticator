@@ -120,35 +120,18 @@ import {
   IonTitle,
   IonToolbar,
   IonItem,
-  IonLabel,
   IonInput,
   IonButton,
   IonAlert,
   IonIcon,
   onIonViewWillEnter,
-  modalController,
-  IonModal,
-  IonButtons,
-  IonTextarea,
 } from "@ionic/vue";
-import {
-  saveSelectedAccount,
-  getAccounts,
-  saveAccount,
-  smallRandomString,
-  paste,
-  getSettings,
-  replaceAccounts,
-  getNextIdAccounts,
-} from "@/utils/platform";
+import { getAccounts, saveAccount, paste, getNextIdAccounts } from "@/utils/platform";
 import router from "@/router";
 import { useRoute } from "vue-router";
-import type { Account, Settings } from "@/extension/types";
-import UnlockModal from "@/views/UnlockModal.vue";
-import { encrypt, getCryptoParams } from "@/utils/webCrypto";
+import type { Account } from "@/extension/types";
 
 import { clipboardOutline } from "ionicons/icons";
-import { setUnlockModalState } from "@/utils/unlockStore";
 import { isValidDomain, extractDomainWthoutWww } from "@/utils/misc";
 import { decodeOtpSecret, generateOTP } from "@/utils/OTP";
 import { getQRCode } from "@/utils/QR";
@@ -169,11 +152,9 @@ const alertMsg = ref("");
 const loading = ref(false);
 
 const isEdit = route.path.includes("/edit");
-const mnemonicModal = ref(false);
 const qrFileUpload = (ref(null) as unknown) as Ref<HTMLInputElement>;
 
 let accountsProm: Promise<Account[] | undefined>;
-let settingsProm: Promise<Settings | undefined>;
 
 const resetFields = () => {
   service.value = "";
@@ -262,24 +243,6 @@ const getQrFromTab = async () => {
     alertOpen.value = true;
     return;
   }
-};
-
-const openModal = async () => {
-  const modal = await modalController.create({
-    component: UnlockModal,
-    animated: true,
-    focusTrap: false,
-    backdropDismiss: false,
-    componentProps: {
-      unlockType: "addAccount",
-    },
-  });
-  await modal.present();
-  setUnlockModalState(true);
-  const { role, data } = await modal.onWillDismiss();
-  if (role === "confirm") return data;
-  setUnlockModalState(false);
-  return false;
 };
 
 onIonViewWillEnter(async () => {
