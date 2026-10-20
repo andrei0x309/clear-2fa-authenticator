@@ -19,6 +19,8 @@ Features include:
 
 For more info, you can check [docs website](https://clear-2fa-authenticator.flashsoft.eu/)
 
+Chrome Store Link: [https://chromewebstore.google.com/detail/clear-2fa-authenticator/ilobdcimfnfnlnkjobaolnfcnanneoja](https://chromewebstore.google.com/detail/clear-2fa-authenticator/ilobdcimfnfnlnkjobaolnfcnanneoja)
+
 ## How to Build from Github
 
 ```bash

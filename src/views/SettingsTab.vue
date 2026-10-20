@@ -455,49 +455,52 @@ const validateFile = async () => {
       };
     }
     const reader = new FileReader();
-    reader.onload = (event) => {
-      const json = JSON.parse(event?.target?.result as string);
-      if (!json.length) {
-        return {
-          error:
-            'JSON format is wrong. Corrrect JSON format is: [{"service": "Google", "otpSecret": "F2ABAF21A2", "account": "example@gmail.com"}...]',
-        };
-      }
-      const testNecesaryFields = json.some(
-        (e: any) => !("service" in e) || !("otpSecret" in e) || !("account" in e)
-      );
-      if (testNecesaryFields) {
-        return {
-          error: `JSON format is wrong. Corrrect JSON format is: [{"service": "Google", "otpSecret": "F2ABAF21A2", "account": "example@gmail.com"}...]'`,
-        };
-      }
+    const readPromise = new Promise((resolve) => {
+      reader.onload = (event) => {
+        const json = JSON.parse(event?.target?.result as string);
+        if (!json.length) {
+          return resolve({
+            error:
+              'JSON format is wrong. Corrrect JSON format is: [{"service": "Google", "otpSecret": "F2ABAF21A2", "account": "example@gmail.com"}...]',
+          });
+        }
+        const testNecesaryFields = json.some(
+          (e: any) => !("service" in e) || !("otpSecret" in e) || !("account" in e)
+        );
+        if (testNecesaryFields) {
+          return resolve({
+            error: `JSON format is wrong. Corrrect JSON format is: [{"service": "Google", "otpSecret": "F2ABAF21A2", "account": "example@gmail.com"}...]'`,
+          });
+        }
 
-      let hasDisallowedFields = false;
+        let hasDisallowedFields = false;
 
-      for (let i = 0; i < json.length; i++) {
-        const keys = Object.keys(json[i]);
+        for (let i = 0; i < json.length; i++) {
+          const keys = Object.keys(json[i]);
 
-        for (let j = 0; j < keys.length; j++) {
-          if (
-            !allowerdJSONFields.includes(keys[j] as typeof allowerdJSONFields[number])
-          ) {
-            hasDisallowedFields = true;
-            break;
+          for (let j = 0; j < keys.length; j++) {
+            if (
+              !allowerdJSONFields.includes(keys[j] as typeof allowerdJSONFields[number])
+            ) {
+              hasDisallowedFields = true;
+              break;
+            }
           }
         }
-      }
 
-      if (hasDisallowedFields) {
-        return {
-          error: `JSON format contains disallowed fields. Allowed fields are: ${allowerdJSONFields.join(
-            ", "
-          )}`,
-        };
-      }
+        if (hasDisallowedFields) {
+          return resolve({
+            error: `JSON format contains disallowed fields. Allowed fields are: ${allowerdJSONFields.join(
+              ", "
+            )}`,
+          });
+        }
 
-      return { error: false, json };
-    };
+        return resolve({ error: false, json });
+      };
+    });
     reader.readAsText(importFile.value?.files?.[0] as File);
+    return await readPromise;
   } catch {
     return {
       error: "Parsing JSON file",
