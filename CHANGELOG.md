@@ -1,5 +1,10 @@
 # Changelog
 
+## Manifest Version 1.1.4
+
+- minor fixes to add account
+- refactor right click paste
+
 ## Manifest Version 1.1.3
 
 - optimize `validateFile` function used in `SettingsTab.vue` for importing json files

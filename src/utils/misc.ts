@@ -60,6 +60,9 @@ export const isValidDomain = (domain: string) => {
 }
 
 export const extractDomainWthoutWww = (domain: string) => {
+  if(domain.length === 0) {
+    return ''
+  }
   const url = new URL(domain)
   return url.hostname.replace(/^www\./, '')
 }
