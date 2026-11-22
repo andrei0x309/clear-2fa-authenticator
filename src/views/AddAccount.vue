@@ -151,7 +151,7 @@ const alertOpen = ref(false);
 const alertMsg = ref("");
 const loading = ref(false);
 
-const isEdit = route.path.includes("/edit");
+const isEdit = ref(route.path.includes("/edit"));
 const qrFileUpload = (ref(null) as unknown) as Ref<HTMLInputElement>;
 
 let accountsProm: Promise<Account[] | undefined>;
@@ -246,7 +246,7 @@ const getQrFromTab = async () => {
 };
 
 onIonViewWillEnter(async () => {
-  if (isEdit) {
+  if (isEdit.value) {
     loading.value = true;
     accountsProm = getAccounts();
     const accounts = (await accountsProm) as Account[];
